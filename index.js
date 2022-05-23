@@ -1,15 +1,28 @@
 const express = require('express');
-const Server = require('./models/server');
+require('./models/index');
+const models = require('./models/');
 const app = express();
-
 app.use(express.json());
 
-app.get('/', async (req, res) => {
-    const data = await Server.findAll();
-    console.log(data);
-    res.status(200).json({name: 'Black'});
+app.get('/servers', async (req, res) => {
+    const data = await models.Server.findAll();
+    if (data.length > 0) {
+        res.status(200).json(data);
+    }else{
+        res.status(200).json({message: 'No servers'});
+    }
 })
+
+//TODO For tests
+// app.get('/add', async (req, res) => {
+//     await models.Server.create({
+//         servername: 'BlackGOldRP',
+//         maxonline: 1000,
+//         online: 0,
+//         ip: '127.0.0.2',
+//     });
+// })
 
 app.listen(80, () => {
     console.log(`server started on http://127.0.0.1:80`);
-})
+});
